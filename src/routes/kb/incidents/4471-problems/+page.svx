@@ -1,0 +1,60 @@
+---
+layout: runbook
+title: '#4471 · three problems, not one'
+owner: support desk
+status: open
+reviewed: 2026-11-02
+signature: Paweł Sobieraj
+---
+
+<script>
+  import ProblemTable from '#lib/kb/ProblemTable.svelte';
+  import Callout from '#lib/kb/Callout.svelte';
+  import RenderStamp from '#lib/kb/RenderStamp.svelte';
+</script>
+
+[#4471](/kb/incidents/4471) is marked **known: one issue, one fix queued**. The reports
+merged into it show three different problems. The queued parser fix closes only the first one.
+
+<Callout kind="warn">
+Do not close #4471 when the parser fix ships. The other two problems keep coming in after it.
+</Callout>
+
+## What the reports show
+
+<ProblemTable ticket={4471} repo="sobierajpawel/support-kb" issues={{ parser: 1, hint: 2, 'one-day': 3 }} />
+
+Counts are unique reports. The export lists some reports twice, so its raw row count is higher.
+
+## The three problems
+
+**`parser`: the shared parser reads every date month first.** Day-first tenants (all eleven on
+file) type `07/04` for 7 April and get 4 July. This is the problem #4471 describes, and the
+queued fix is for it.
+
+**`hint`: booking-v3 prints `MM/DD/YYYY` under its date field.** People at day-first tenants on
+booking-v3 type what the hint asks, month first, and the form reads it day first. The symptom is
+the same flipped date. The cause is the hint, so the parser fix does not touch it. It comes only
+through the form channel of booking-v3 tenants.
+
+**`one-day`: the date is right, but the event lands a day early.** No day and month are swapped.
+One client sees Tuesday, another sees Monday for the same meeting; an invite arrives "before" the
+booking. That points at a time zone conversion, not at date parsing. The desk already read these
+as one-day moves (`desk-notes.json`), but the incident page still counts them under `parser`.
+
+## Why one ticket hid three
+
+- Merging is by subject line ([decision 0001](/kb/decisions/0001-dedupe-by-subject)). All three
+  problems produce the same subjects: "wrong day", "date is wrong".
+- Intake tags each report from the reporter's browser. The cause depends on the tenant's locale,
+  form and channel, so the tags disagree with the cause (see the tag column on the
+  [#4471 page](/kb/incidents/4471)).
+- The #4471 table counts by cause and leaves the one-day moves inside `parser` as a footnote.
+
+## What to do
+
+1. Keep one ticket per problem, linked from the table above.
+2. Close each ticket only when its own reports stop arriving.
+3. Split by tenant, form and channel, not by subject, when a big ticket grows.
+
+<RenderStamp {signature} />
