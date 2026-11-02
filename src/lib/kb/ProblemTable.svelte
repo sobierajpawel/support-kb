@@ -20,6 +20,12 @@
   <strong>{split.merged.length}</strong> reports merged into #{ticket} ·
   <strong>{split.groups.length}</strong> problems
 </p>
+{#if split.groups.some((g) => g.problem === 'one-day')}
+  <p class="muted">
+    Counted the way the desk files them, by tenant: the one-day reports also sit inside the
+    count they are filed under, so the rows add up to more than {split.merged.length}.
+  </p>
+{/if}
 
 <table>
   <thead>

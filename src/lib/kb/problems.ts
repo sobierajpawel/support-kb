@@ -35,11 +35,15 @@ export function splitTicket(
   oneDayMove: readonly string[],
 ): { merged: Report[]; groups: ProblemGroup[] } {
   const merged = uniqueById(all).filter((r) => r.mergedInto === ticket);
+  // Counted the desk's way: every report under its cause by tenant (causes.ts), as the #4471 view
+  // files them. One-day moves stay counted there too, and get their own row as a subset.
   const by = new Map<Problem, Report[]>();
   for (const r of merged) {
-    const p = problemOf(r, tenantOf(r), oneDayMove);
+    const p: Problem = causeOf(r, tenantOf(r)) ?? 'unplaced';
     by.set(p, [...(by.get(p) ?? []), r]);
   }
+  const moved = merged.filter((r) => problemOf(r, tenantOf(r), oneDayMove) === 'one-day');
+  if (moved.length) by.set('one-day', moved);
   const groups = [...by.entries()]
     .map(([problem, rs]) => {
       const days = rs.map((r) => r.receivedAt.slice(0, 10)).sort();

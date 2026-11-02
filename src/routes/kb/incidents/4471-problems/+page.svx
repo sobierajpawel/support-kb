@@ -13,11 +13,22 @@ signature: Paweł Sobieraj
   import RenderStamp from '#lib/kb/RenderStamp.svelte';
 </script>
 
-[#4471](/kb/incidents/4471) is marked **known: one issue, one fix queued**. The reports
-merged into it show three different problems. The queued parser fix closes only the first one.
+[#4471](/kb/incidents/4471) was merged as **one issue, one fix queued**. The reports merged into
+it show three different problems. Engineering closed #4471 on 5 October, and that closed two of
+them. The third is still open.
+
+## Where each problem stands
+
+| problem | engineering, 5 Oct | ticket |
+| --- | --- | --- |
+| `parser` | fixed: `fix(dates): parse dd/mm for eu locales` | [#1](https://github.com/sobierajpawel/support-kb/issues/1) closed, completed |
+| `hint` | won't fix: booking-v3 form retired | [#2](https://github.com/sobierajpawel/support-kb/issues/2) closed, not planned |
+| `one-day` | not addressed | [#3](https://github.com/sobierajpawel/support-kb/issues/3) **open** |
 
 <Callout kind="warn">
-Do not close #4471 when the parser fix ships. The other two problems keep coming in after it.
+#4471 is closed, but the one-day problem is not fixed. The parser fix does not touch it, because
+those dates are read correctly and then land a day early. Send new one-day reports to #3, not to
+#4471.
 </Callout>
 
 ## What the reports show
@@ -30,7 +41,7 @@ Counts are unique reports. The export lists some reports twice, so its raw row c
 
 **`parser`: the shared parser reads every date month first.** Day-first tenants (all eleven on
 file) type `07/04` for 7 April and get 4 July. This is the problem #4471 describes, and the
-queued fix is for it.
+fix shipped on 5 October.
 
 **`hint`: booking-v3 prints `MM/DD/YYYY` under its date field.** People at day-first tenants on
 booking-v3 type what the hint asks, month first, and the form reads it day first. The symptom is
@@ -53,8 +64,8 @@ as one-day moves (`desk-notes.json`), but the incident page still counts them un
 
 ## What to do
 
-1. Keep one ticket per problem, linked from the table above.
-2. Close each ticket only when its own reports stop arriving.
+1. Keep one ticket per problem. #3 stays open until the one-day reports stop.
+2. Close a ticket when engineering resolves its own problem, not when the merged ticket closes.
 3. Split by tenant, form and channel, not by subject, when a big ticket grows.
 
 <RenderStamp {signature} />
