@@ -4,7 +4,7 @@ title: '#4471 · three problems, not one'
 owner: support desk
 status: open
 reviewed: 2026-11-02
-signature: Paweł Sobieraj
+signature: v1.eyJzdWIiOiIzMDc2IiwiYXVkIjoiY2hhbGxlbmdlOndoYXQtaXQtc2hvd3MiLCJpYXQiOjE3OTM2MTAzMDgsImV4cCI6MTc5MzY5NjcwOH0.TA4eI3aEdBcRsnPAHHA_ul-GauHx8RL6cNdX6BZ25nE
 ---
 
 <script>
